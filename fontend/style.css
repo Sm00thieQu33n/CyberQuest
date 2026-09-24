@@ -38,3 +38,62 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
+/*phishing 1*/
+.selectable {
+    background-color: transparent;
+    border: 2px solid transparent;
+    padding: 4px;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+.selectable:hover {
+    border: 2px dashed #888;
+}
+
+.selectable.selected {
+    background-color: #ffe6e6;
+    border: 2px solid #cc0000;
+}
+
+#submitButton {
+    margin-top: 25px;
+    padding: 12px 20px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f0f4f8;
+}
+
+.selectable {
+    background-color: transparent;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.selectable:hover {
+    background-color: #fff3a6;
+}
+
+.selectable.selected {
+    background-color: #ffcccc;
+    border: 1px solid #cc0000;
+}
+
+#submitButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button {
+    pointer-events: auto;
+    cursor: pointer;
+}
