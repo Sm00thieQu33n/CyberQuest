@@ -1,113 +1,108 @@
+
 const selectableItems = document.querySelectorAll(".selectable");
 const submitButton = document.getElementById("submitButton");
 
-
-// Determine if the scenario allows one or multiple selections
 const selectionMode = document.body.dataset.selection || "multiple";
 
-
-// Handle answer selection
+// Let users select answers
 selectableItems.forEach(function(item) {
-
     item.addEventListener("click", function() {
-
-        // Single choice scenario
         if (selectionMode === "single") {
-
             selectableItems.forEach(function(otherItem) {
                 otherItem.classList.remove("selected");
             });
 
             item.classList.add("selected");
-
-        }
-
-        // Multiple choice scenario
-        else {
-
+        } else {
             item.classList.toggle("selected");
-
         }
-
     });
-
 });
 
-
-// Submit button
+// Score the scenario and open its feedback page
 if (submitButton) {
-
     submitButton.addEventListener("click", function() {
-
-        let correct = 0;
-
-        selectableItems.forEach(function(item) {
-
-            if (
-                item.classList.contains("selected") &&
-                item.dataset.answer === "correct"
-            ) {
-                correct++;
-            }
-
-        });
-
-
-        // Get the scenario name
         const scenario = document.body.dataset.scenario;
 
-
-        // Save the score
-        localStorage.setItem(
-            scenario + "Score",
-            correct
+        const selectedItems = Array.from(selectableItems).filter(
+            item => item.classList.contains("selected")
         );
 
+        const correctItems = Array.from(selectableItems).filter(
+            item => item.dataset.answer === "correct"
+        );
 
-        // Send the user to the correct feedback page
+        const correctSelected = selectedItems.filter(
+            item => item.dataset.answer === "correct"
+        ).length;
 
-        if (scenario === "badlink1") {
+        const incorrectSelected = selectedItems.filter(
+            item => item.dataset.answer !== "correct"
+        ).length;
 
-            window.location.href =
-                "../../feedback/links/badlinkfeedback1.html";
+        const totalCorrect = correctItems.length;
 
+        let percentage = 0;
+
+        if (totalCorrect > 0) {
+            percentage = Math.round(
+                Math.max(0, correctSelected - incorrectSelected)
+                / totalCorrect * 100
+            );
         }
 
-        else if (scenario === "badlink2") {
+        // Save the scenario score
+        localStorage.setItem(scenario + "Score", correctSelected);
+        localStorage.setItem(scenario + "Percent", percentage);
 
-            window.location.href =
-                "../../feedback/links/badlinkfeedback2.html";
+        // Record completed scenarios
+        const completed = JSON.parse(
+            localStorage.getItem("completedScenarios") || "[]"
+        );
 
+        if (!completed.includes(scenario)) {
+            completed.push(scenario);
+        }
+
+        localStorage.setItem(
+            "completedScenarios",
+            JSON.stringify(completed)
+        );
+
+        // Navigate to feedback page
+        const feedbackPages = {
+            "1": "../../feedback/phishing/phishfeedback1.html",
+            "2": "../../feedback/phishing/phishfeedback2.html",
+            "badlink1": "../../feedback/links/badlinkfeedback1.html",
+            "badlink2": "../../feedback/links/badlinkfeedback2.html",
+            "password1": "../../feedback/password/passwordfeedback1.html",
+            "password2": "../../feedback/password/passwordfeedback2.html",
+            "physical1": "../../feedback/physical/physicalfeedback1.html",
+            "physical2": "../../feedback/physical/physicalfeedback2.html"
+        };
+
+        if (feedbackPages[scenario]) {
+            window.location.href = feedbackPages[scenario];
+        } else {
+            alert("Feedback page not found for this scenario.");
+        }
+    });
 }
 
-        else if (scenario === "password1") {
+// LOGIN CODE — separate from scenario scoring
+const loginForm = document.getElementById("loginForm");
 
-            window.location.href =
-                "../../feedback/password/passwordfeedback1.html";
+if (loginForm) {
+    loginForm.addEventListener("submit", function(event) {
+        event.preventDefault();
 
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (username === "Brennan" && password === "cyberquest") {
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Incorrect username or password. Please try again.");
         }
-
-        else if (scenario === "physical1") {
-
-            window.location.href =
-                "../../feedback/physical/physicalfeedback1.html";
-
-        }
-
-        else if (scenario === "1") {
-
-            window.location.href =
-                "../../feedback/phishing/phishfeedback1.html";
-
-        }
-
-        else if (scenario === "2") {
-
-            window.location.href =
-                "../../feedback/phishing/phishfeedback2.html";
-
-        }
-
     });
-
 }

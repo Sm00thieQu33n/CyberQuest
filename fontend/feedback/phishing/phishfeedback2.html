@@ -1,10 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberQuest - Phishing Feedback</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 
 <body>
@@ -30,31 +32,25 @@
             Try Again
         </button>
 
-        <button onclick="window.location.href='dashboard.html'">
+        <button onclick="window.location.href='../../dashboard.html'">
             Return to Dashboard
         </button>
 
     </main>
 
     <script>
-
-        const score = localStorage.getItem("scenario2Score") || 0;
+        const score = localStorage.getItem("2Score") || 0;
 
         document.getElementById("score").textContent =
-            "You identified " + score + " out of 4 warning signs.";
+            "You identified " + score + " warning signs.";
 
         if (Number(score) === 4) {
-
             document.getElementById("feedbackMessage").textContent =
                 "Great job! You identified all of the suspicious elements.";
-
         } else {
-
             document.getElementById("feedbackMessage").textContent =
                 "Good attempt! Review the warning signs below to see what you may have missed.";
-
         }
-
     </script>
 
 </body>
